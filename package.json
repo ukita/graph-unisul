@@ -1,0 +1,14 @@
+{
+  "name": "graph.js",
+  "version": "0.1.0",
+  "description": "Graph implementation in JS",
+  "main": "index.js",
+  "author": "Bruno Ukita <brunoukita@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^21.1.0"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
