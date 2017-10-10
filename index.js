@@ -146,6 +146,75 @@ class Graph {
     return [originVertex, ...path.reverse()];
   }
 
+  computeKruskal() {
+    if (this.oriented) throw new Error('Graph must not be oriented');
+    if (!this.weighted) throw new Error('Graph must be weighted');
+
+    const minimumSpanningTree = [];
+    const sortedEdges = this.edges.sort(edge => -edge[2]);
+
+    let forest = this.vertices.map(vertex => [vertex]);
+
+    while(forest.length > 1) {
+      const edge = sortedEdges.pop();
+      const [vertex1, vertex2] = edge;
+
+      const [tree1] = forest.filter(tree => tree.includes(vertex1));
+      const [tree2] = forest.filter(tree => tree.includes(vertex2));
+
+      if (tree1 != tree2) {
+        forest = forest.filter(tree => !tree.includes(tree1[0]))
+                       .filter(tree => !tree.includes(tree2[0]));
+
+        forest.push([...tree1, ...tree2]);
+        minimumSpanningTree.push(edge);
+      }
+    }
+
+    return minimumSpanningTree;
+  }
+
+  computePrimJarnik() {
+    if (this.oriented) throw new Error('Graph must not be oriented');
+    if (!this.weighted) throw new Error('Graph must be weighted');
+
+    let allNodesVisited = false;
+    const nodes = this.vertices.reduce((prev, vertex) => {
+      prev.push({
+        name: vertex,
+        distance: Infinity, // Distance is 0 if the vertex is equal to origin
+        previous: undefined,
+        visited: false
+      });
+
+      return prev;
+    }, []);
+
+    nodes[0].distance = 0;
+
+    while(!allNodesVisited) {
+      const node = this.getVertexByShortestDistance(nodes);
+      const adjacencyList = this.adjacencyList[node.name];
+
+      adjacencyList.forEach(adjVertex => {
+        const vertex = nodes.find(n => n.name === adjVertex);
+        const distance = node.distance + this.getDistance(node.name, adjVertex);
+
+        if (vertex.distance > distance) {
+          vertex.distance = distance;
+          vertex.previous = node;
+        }
+      });
+
+      node.visited = true;
+      allNodesVisited = nodes.every(n => n.visited);
+    }
+
+    return nodes
+            .filter(node => node.previous)
+            .map(node => [node.name, node.previous.name, node.distance]);
+  }
+
   /*
    * Helpers functions
    */
@@ -173,6 +242,10 @@ class Graph {
     const matrix = this.computeAdjacencyMatrix();
 
     return matrix[originVertex][destinationVertex];
+  }
+
+  findMinimumEdge() {
+
   }
 }
 

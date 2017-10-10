@@ -43,7 +43,8 @@ async function showOptions(graph) {
     'Adjacency List': showAdjacencyList,
     'Adjacency Matrix': showAdjacencyMatrix,
     'Incidence Matrix': showIncidenceMatrix,
-    'Shortest Path': showShortestPath
+    'Shortest Path': showShortestPath,
+    'Minimum Spanning Tree': showMST,
   };
 
   const options = [
@@ -149,6 +150,43 @@ async function showShortestPath(graph) {
   });
 
   console.log(table.toString());
+}
+
+async function showMST(graph) {
+  const options = [
+    {
+      type: 'list',
+      name: 'option',
+      message: 'What you want?',
+      choices: ['Prim', 'Kruskal']
+    }
+  ];
+
+  const { option } = await inquirer.prompt(options);
+
+
+  try {
+    let mst;
+
+    if (option == 'Prim') {
+      mst = graph.computePrimJarnik();
+    } else {
+      mst = graph.computeKruskal();
+    }
+  } catch (e) {
+    console.log(chalk.red.bold(e))
+    return;
+  }
+
+  const table = new cliTable({
+    head: mst,
+    chars: {
+      'top': '' , 'top-mid': '' , 'top-left': '' , 'top-right': '',
+      'bottom': '' , 'bottom-mid': '' , 'bottom-left': '' , 'bottom-right': '',
+      'left': '' , 'left-mid': '' , 'mid': '' , 'mid-mid': '',
+      'right': '' , 'right-mid': '' , 'middle': '=>'
+    }
+  });
 }
 
 async function init() {

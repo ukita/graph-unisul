@@ -220,4 +220,48 @@ describe('Graph', () => {
       expect(path).toEqual(['A', 'B', 'C']);
     });
   });
+
+  describe('Minimum Spanning Tree', () => {
+    let graph;
+
+    beforeEach(() => {
+      graph = new Graph({ weighted: true });
+      graph.addVertex('A');
+      graph.addVertex('B');
+      graph.addVertex('C');
+      graph.addVertex('D');
+      graph.addVertex('E');
+      graph.addVertex('F');
+      graph.addVertex('G');
+      graph.addVertex('H');
+      graph.addVertex('I');
+
+      graph.addEdge('A', 'B', 4);
+      graph.addEdge('A', 'H', 8);
+      graph.addEdge('B', 'C', 8);
+      graph.addEdge('C', 'F', 4);
+      graph.addEdge('B', 'H', 11);
+      graph.addEdge('C', 'D', 7);
+      graph.addEdge('D', 'F', 14);
+      graph.addEdge('D', 'E', 9);
+      graph.addEdge('E', 'F', 10);
+      graph.addEdge('F', 'G', 2);
+      graph.addEdge('G', 'H', 1);
+      graph.addEdge('H', 'I', 7);
+      graph.addEdge('C', 'I', 2);
+      graph.addEdge('G', 'I', 6);
+    });
+
+    it('should compute Kruskal algorithm', () => {
+      const minimumSpanningTree = graph.computeKruskal();
+
+      console.log(minimumSpanningTree);
+    });
+
+    it('should compute Prim-Jarnik algorithm', () => {
+      const minimumSpanningTree = graph.computePrimJarnik();
+
+      console.log(minimumSpanningTree);
+    });
+  });
 });
